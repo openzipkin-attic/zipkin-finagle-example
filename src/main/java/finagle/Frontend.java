@@ -10,7 +10,7 @@ import com.twitter.finagle.zipkin.core.SamplingTracer;
 import com.twitter.util.Future;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import zipkin.finagle.kafka.KafkaZipkinTracer;
+import zipkin.finagle.http.HttpZipkinTracer;
 
 public class Frontend extends Service<Request, Response> {
 
@@ -35,18 +35,19 @@ public class Frontend extends Service<Request, Response> {
     // This property says sample 100% of traces.
     System.setProperty("zipkin.initialSampleRate", "1.0");
     // All servers need to point to the same zipkin transport
-    System.setProperty("zipkin.kafka.bootstrapServers", "192.168.99.100:9092");
+    System.setProperty("zipkin.http.host", "localhost:9411"); // default
 
     // It is unreliable to rely on implicit tracer config (Ex sometimes NullTracer is used).
     // Always set the tracer explicitly. The default constructor reads from system properties.
-    SamplingTracer tracer = new KafkaZipkinTracer();
+    SamplingTracer tracer = new HttpZipkinTracer();
 
     Service<Request, Response> backendClient =
         ClientBuilder.safeBuild(ClientBuilder.get()
             .tracer(tracer)
             .codec(Http.get().enableTracing(true))
             .hosts("localhost:9000")
-            .hostConnectionLimit(1));
+            .hostConnectionLimit(1)
+            .name("frontend")); // this assigns the local service name
 
     ServerBuilder.safeBuild(
         new Frontend(backendClient),
@@ -54,6 +55,6 @@ public class Frontend extends Service<Request, Response> {
             .tracer(tracer)
             .codec(Http.get().enableTracing(true))
             .bindTo(new InetSocketAddress(InetAddress.getLoopbackAddress(), 8081))
-            .name("frontend"));
+            .name("frontend")); // this assigns the local service name
   }
 }
