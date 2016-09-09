@@ -20,12 +20,12 @@
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-http_${scala.binary.version}</artifactId>
-      <version>6.36.0</version>
+      <version>6.38.0</version>
     </dependency>
     <dependency>
       <groupId>io.zipkin.finagle</groupId>
       <artifactId>zipkin-finagle-http_${scala.binary.version}</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.1</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
