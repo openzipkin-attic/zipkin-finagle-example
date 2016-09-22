@@ -25,7 +25,7 @@
     <dependency>
       <groupId>io.zipkin.finagle</groupId>
       <artifactId>zipkin-finagle-http_${scala.binary.version}</artifactId>
-      <version>0.2.1</version>
+      <version>0.3.0</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
