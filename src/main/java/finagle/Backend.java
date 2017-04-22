@@ -1,5 +1,6 @@
 package finagle;
 
+import com.twitter.app.Flags;
 import com.twitter.finagle.Service;
 import com.twitter.finagle.builder.ServerBuilder;
 import com.twitter.finagle.http.Http;
@@ -26,8 +27,15 @@ public class Backend extends Service<Request, Response> {
   }
 
   public static void main(String[] args) {
-    // All servers need to point to the same zipkin transport
-    System.setProperty("zipkin.http.host", "localhost:9411"); // default
+    if (args == null || args.length == 0) {
+      args = new String[] {
+          // All servers need to point to the same zipkin transport (note this is default)
+          "-zipkin.http.host", "localhost:9411"
+      };
+    }
+
+    // parse any commandline arguments
+    new Flags("backend", true, true).parseOrExit1(args, false);
 
     // It is unreliable to rely on implicit tracer config (Ex sometimes NullTracer is used).
     // Always set the tracer explicitly. The default constructor reads from system properties.

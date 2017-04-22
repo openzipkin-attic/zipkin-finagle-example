@@ -1,5 +1,6 @@
 package finagle;
 
+import com.twitter.app.Flags;
 import com.twitter.finagle.Service;
 import com.twitter.finagle.builder.ClientBuilder;
 import com.twitter.finagle.builder.ServerBuilder;
@@ -22,7 +23,7 @@ public class Frontend extends Service<Request, Response> {
 
   @Override
   public Future<Response> apply(Request request) {
-    if (request.getUri().equals("/")) {
+    if (request.uri().equals("/")) {
       return backendClient.apply(Request.apply("/api"));
     }
     Response response = Response.apply();
@@ -31,11 +32,18 @@ public class Frontend extends Service<Request, Response> {
   }
 
   public static void main(String[] args) {
-    // The frontend makes a sampling decision (via Trace.letTracerAndId) and propagates it downstream.
-    // This property says sample 100% of traces.
-    System.setProperty("zipkin.initialSampleRate", "1.0");
-    // All servers need to point to the same zipkin transport
-    System.setProperty("zipkin.http.host", "localhost:9411"); // default
+    if (args == null || args.length == 0) {
+      args = new String[] {
+          // The frontend makes a sampling decision (via Trace.letTracerAndId) and propagates it downstream.
+          // This property says sample 100% of traces.
+          "-zipkin.initialSampleRate", "1.0",
+          // All servers need to point to the same zipkin transport (note this is default)
+          "-zipkin.http.host", "localhost:9411"
+      };
+    }
+
+    // parse any commandline arguments
+    new Flags("frontend", true, true).parseOrExit1(args, false);
 
     // It is unreliable to rely on implicit tracer config (Ex sometimes NullTracer is used).
     // Always set the tracer explicitly. The default constructor reads from system properties.
