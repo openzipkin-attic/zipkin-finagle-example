@@ -20,12 +20,12 @@
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-http_${scala.binary.version}</artifactId>
-      <version>6.44.0</version>
+      <version>6.45.0</version>
     </dependency>
     <dependency>
       <groupId>io.zipkin.finagle</groupId>
       <artifactId>zipkin-finagle-http_${scala.binary.version}</artifactId>
-      <version>0.4.0</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -33,4 +33,19 @@
       <version>1.2.2</version>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <inherited>true</inherited>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.6.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <optimize>true</optimize>
+          <debug>true</debug>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
