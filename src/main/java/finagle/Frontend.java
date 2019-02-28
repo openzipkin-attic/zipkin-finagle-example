@@ -12,7 +12,7 @@ import com.twitter.util.Await;
 import com.twitter.util.Future;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import zipkin.finagle.http.HttpZipkinTracer;
+import zipkin2.finagle.http.HttpZipkinTracer;
 
 public class Frontend extends Service<Request, Response> {
 
