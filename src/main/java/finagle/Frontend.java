@@ -8,11 +8,11 @@ import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Response;
 import com.twitter.finagle.tracing.traceId128Bit$;
 import com.twitter.finagle.zipkin.core.SamplingTracer;
+import com.twitter.finagle.zipkin.thrift.ScribeZipkinTracer;
 import com.twitter.util.Await;
 import com.twitter.util.Future;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import zipkin2.finagle.http.HttpZipkinTracer;
 
 public class Frontend extends Service<Request, Response> {
 
@@ -37,9 +37,9 @@ public class Frontend extends Service<Request, Response> {
       args = new String[] {
           // The frontend makes a sampling decision (via Trace.letTracerAndId) and propagates it downstream.
           // This property says sample 100% of traces.
-          "-zipkin.initialSampleRate", "1.0",
+          "-com.twitter.finagle.zipkin.initialSampleRate", "1.0",
           // All servers need to point to the same zipkin transport (note this is default)
-          "-zipkin.http.host", "localhost:9411",
+          "-com.twitter.finagle.zipkin.host", "localhost:9410",
           // Originate 128-bit trace IDs
           "-com.twitter.finagle.tracing.traceId128Bit", "true"
       };
@@ -52,7 +52,7 @@ public class Frontend extends Service<Request, Response> {
 
     // It is unreliable to rely on implicit tracer config (Ex sometimes NullTracer is used).
     // Always set the tracer explicitly. The default constructor reads from system properties.
-    SamplingTracer tracer = new HttpZipkinTracer();
+    SamplingTracer tracer = new ScribeZipkinTracer();
 
     Service<Request, Response> backendClient = Http.client()
         .withTracer(tracer)

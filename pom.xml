@@ -23,9 +23,9 @@
       <version>19.4.0</version>
     </dependency>
     <dependency>
-      <groupId>io.zipkin.finagle2</groupId>
-      <artifactId>zipkin-finagle-http_${scala.binary.version}</artifactId>
-      <version>2.0.14</version>
+      <groupId>com.twitter</groupId>
+      <artifactId>finagle-zipkin-scribe_${scala.binary.version}</artifactId>
+      <version>19.4.0</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>

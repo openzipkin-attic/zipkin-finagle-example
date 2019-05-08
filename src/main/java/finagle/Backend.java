@@ -7,12 +7,12 @@ import com.twitter.finagle.Service;
 import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Response;
 import com.twitter.finagle.zipkin.core.SamplingTracer;
+import com.twitter.finagle.zipkin.thrift.ScribeZipkinTracer;
 import com.twitter.util.Await;
 import com.twitter.util.Future;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Date;
-import zipkin2.finagle.http.HttpZipkinTracer;
 
 public class Backend extends Service<Request, Response> {
 
@@ -31,7 +31,7 @@ public class Backend extends Service<Request, Response> {
     if (args == null || args.length == 0) {
       args = new String[] {
           // All servers need to point to the same zipkin transport (note this is default)
-          "-zipkin.http.host", "localhost:9411"
+          "-com.twitter.finagle.zipkin.host", "localhost:9410",
       };
     }
 
@@ -40,7 +40,7 @@ public class Backend extends Service<Request, Response> {
 
     // It is unreliable to rely on implicit tracer config (Ex sometimes NullTracer is used).
     // Always set the tracer explicitly. The default constructor reads from system properties.
-    SamplingTracer tracer = new HttpZipkinTracer();
+    SamplingTracer tracer = new ScribeZipkinTracer();
 
     ListeningServer server = Http.server()
         .withTracer(tracer)
