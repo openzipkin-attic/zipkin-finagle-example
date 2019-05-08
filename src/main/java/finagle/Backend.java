@@ -6,7 +6,7 @@ import com.twitter.finagle.ListeningServer;
 import com.twitter.finagle.Service;
 import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Response;
-import com.twitter.finagle.zipkin.core.SamplingTracer;
+import com.twitter.finagle.tracing.Trace;
 import com.twitter.finagle.zipkin.thrift.ScribeZipkinTracer;
 import com.twitter.util.Await;
 import com.twitter.util.Future;
@@ -40,12 +40,9 @@ public class Backend extends Service<Request, Response> {
 
     // It is unreliable to rely on implicit tracer config (Ex sometimes NullTracer is used).
     // Always set the tracer explicitly. The default constructor reads from system properties.
-    SamplingTracer tracer = new ScribeZipkinTracer();
-
-    ListeningServer server = Http.server()
-        .withTracer(tracer)
+    ListeningServer server = Trace.letTracer(new ScribeZipkinTracer(), () -> Http.server()
         .withLabel("backend") // this assigns the local service name
-        .serve(new InetSocketAddress(InetAddress.getLoopbackAddress(), 9000), new Backend());
+        .serve(new InetSocketAddress(InetAddress.getLoopbackAddress(), 9000), new Backend()));
 
     Await.ready(server);
   }
