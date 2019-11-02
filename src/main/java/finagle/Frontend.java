@@ -28,7 +28,7 @@ public class Frontend extends Service<Request, Response> {
       return backendClient.apply(Request.apply("/api"));
     }
     Response response = Response.apply();
-    response.setStatusCode(404);
+    response.statusCode(404);
     return Future.value(response);
   }
 

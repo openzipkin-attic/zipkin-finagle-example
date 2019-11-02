@@ -2,7 +2,7 @@
 This is an example app where two Finagle (Java) services collaborate on an http request. Notably, timing of these requests are recorded into [Zipkin](http://zipkin.io/), a distributed tracing system. This allows you to see the how long the whole operation took, as well how much time was spent in each service.
 
 Here's an example of what it looks like
-<img width="972" alt="zipkin screen shot" src="https://cloud.githubusercontent.com/assets/64215/17093008/05b9fe02-5279-11e6-9fab-3118522ba684.png">
+<img width="1023" alt="zipkin screen shot" src="https://user-images.githubusercontent.com/64215/68062960-94f3f780-fd48-11e9-8031-f4be08f0d4a8.png">
 
 # Implementation Overview
 

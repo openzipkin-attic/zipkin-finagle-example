@@ -22,7 +22,7 @@ public class Backend extends Service<Request, Response> {
     if (request.path().equals("/api")) {
       response.write(new Date().toString());
     } else {
-      response.setStatusCode(404);
+      response.statusCode(404);
     }
     return Future.value(response);
   }
