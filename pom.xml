@@ -13,7 +13,7 @@
   <description>Example using Zipkin's Finagle tracer to trace RPCs</description>
 
   <properties>
-    <scala.binary.version>2.12</scala.binary.version>
+    <scala.binary.version>2.13</scala.binary.version>
   </properties>
 
   <dependencies>
